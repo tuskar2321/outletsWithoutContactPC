@@ -2,18 +2,21 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-
 import java.io.*;
 import java.util.Objects;
+import java.util.Scanner;
 
 public class Parser {
 
     StringBuilder tryParseJSON() throws FileNotFoundException {
+        RequestInitiator requestInitiator = new RequestInitiator();
         JSONParser jsonParser = new JSONParser();
         StringBuilder stringBuilder = new StringBuilder();
-        try (Reader reader = new FileReader("C:\\Users\\Илюха_1999_орелмолод\\Desktop\\code\\outletsWithoutContactPC\\outlets")) {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Enter cookie : ");
+        try {
             String[] arrayList = tryReadInfo().toString().split(" ");
-            JSONObject jsonObject = (JSONObject) jsonParser.parse(reader);
+            JSONObject jsonObject = (JSONObject) jsonParser.parse(requestInitiator.tryGetRequest(sc.nextLine()));
             JSONArray jsonArray = (JSONArray) jsonObject.get("result");
 
             for (String id : arrayList) {
@@ -33,7 +36,7 @@ public class Parser {
                 }
             }
             stringBuilder.delete((stringBuilder.length()-1),stringBuilder.length());
-        } catch (IOException | ParseException e) {
+        } catch (ParseException | IOException e) {
             e.printStackTrace();
         }
         return stringBuilder;
